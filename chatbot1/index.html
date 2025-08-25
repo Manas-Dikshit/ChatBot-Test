@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Futuristic Chatbot</title>
+  <style>
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: radial-gradient(circle at top, #260f27, #432042, #642c58);
+      color: #ffffff;
+      height: 700px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .interface {
+      width: 55%;
+      max-width: 800px;
+      height: 700px;
+      background: rgba(255, 255, 255, 0.073);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 0, 140, 0.941);
+      border-radius: 20px;
+      display: -webkit-inline-flex;
+      flex-direction: column;
+      box-shadow: 0 0 25px rgba(255, 0, 208, 0.575);
+      overflow: hidden;
+    }
+
+    .chat-header {
+      padding: 20px;
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: bold;
+      background: rgba(255, 0, 144, 0.309);
+      border-bottom: 2px solid rgba(255, 0, 195, 0.696);
+      letter-spacing: 2px;
+      color: rgba(255, 0, 225, 0.99);
+    }
+
+    .chat-box {
+      flex:1;
+      padding: 20px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgb(255, 0, 174) transparent;
+    }
+
+    .bot {
+      background-color: #00f2fe;
+      margin:10px 0;
+      padding: 10px 15px;
+      border-radius: 15px;
+      max-width: 80%;
+      line-height: 1.4;
+      font-size: 0.95rem;
+
+    }
+
+    .bot1 {
+      background: linear-gradient(135deg, #00f2fe, #4facfe);
+    }
+
+    .bot2 {
+      background: linear-gradient(135deg, #43e97b, #38f9d7);
+    }
+
+    .message {
+      display: flex;
+      padding: 10px;
+      border-top: 2px solid rgba(255, 0, 174, 0.3);
+      background: rgba(255, 0, 234, 0.05);
+    }
+
+    .message input {
+      padding: 12px;
+      border: 20px;
+      outline: invert;
+      border-radius: 50px;
+      font: size 1rm;
+      ;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .message button {
+      margin-left: 10px;
+      padding: 12px 15px;
+      border: none;
+      border-radius: 50%;
+      background: cyan;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .chat-input button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 15px cyan;
+    }
+
+    .chat-input button i {
+      font-size: 1.2rem;
+      color: #0f2027;
+    }
+
+    /* Scrollbar */
+    .chat-box::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .chat-box::-webkit-scrollbar-thumb {
+      background: cyan;
+      border-radius: 10px;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" </head>
+
+<body>
+
+  <div class="interface">
+    <h1 class="chat-header">Futuristic Chatbot</h1>
+    <div class="chat-box">
+      <div class="bot bot1">Hi!</div>
+      <div class="bot bot2">How can I help you?</div>
+    </div>
+    <div class="message">
+      <input type="text" placeholder="Type your message...">
+      <button><i class="fas fa-paper-plane"></i></button>
+      <button><i class="fas fa-microphone"></i></button>
+      <button><i class="fa-solid fa-paperclip"></i></button>
+    </div>
+  </div>
+
+</body>
+
+</html>
