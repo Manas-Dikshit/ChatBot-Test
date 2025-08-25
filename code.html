@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus AI - Futuristic Chatbot Interface</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyberblue: '#00d9ff',
+                        cyberpurple: '#8a2be2',
+                        cyberpink: '#ff2a6d',
+                        darkbg: '#0a0a1a',
+                        darkpanel: '#12122a'
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        exo: ['Exo 2', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            font-family: 'Exo 2', sans-serif;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        .cyber-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #00d9ff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.1s ease;
+            box-shadow: 0 0 15px #00d9ff, 0 0 25px #00d9ff;
+        }
+
+        .cyber-cursor-trail {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: #00d9ff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+
+        .glass-effect {
+            background: rgba(18, 18, 42, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 13, 26, 0.37);
+        }
+
+        .cyber-glow {
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+        }
+
+        .message-bubble {
+            max-width: 80%;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 20px;
+            position: relative;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, #00d9ff 0%, #8a2be2 100%);
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+
+        .bot-message {
+            background: rgba(18, 18, 42, 0.8);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: rgba(18, 18, 42, 0.6);
+            border-radius: 20px;
+            margin: 10px 0;
+            max-width: 120px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #00d9ff;
+            border-radius: 50%;
+            margin: 0 3px;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .voice-active {
+            animation: pulse 1s infinite;
+            box-shadow: 0 0 30px #ff2a6d !important;
+        }
+
+        .cyber-border {
+            position: relative;
+        }
+
+        .cyber-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00d9ff, #8a2be2, #ff2a6d, #00d9ff);
+            background-size: 400%;
+            border-radius: 20px;
+            z-index: -1;
+            animation: border-animate 3s linear infinite;
+        }
+
+        @keyframes border-animate {
+            0% { background-position: 0 0; }
+            50% { background-position: 400% 0; }
+            100% { background-position: 0 0; }
+        }
+
+        .scroll-container {
+            scrollbar-width: thin;
+            scrollbar-color: #00d9ff #12122a;
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scroll-container::-webkit-scrollbar-track {
+            background: #12122a;
+            border-radius: 10px;
+        }
+
+        .scroll-container::-webkit-scrollbar-thumb {
+            background: #00d9ff;
+            border-radius: 10px;
+        }
+
+        .cyber-button {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cyber-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .cyber-button:hover::before {
+            left: 100%;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen flex items-center justify-center p-4">
+    <!-- Custom Cursor -->
+    <div class="cyber-cursor"></div>
+    <div class="cyber-cursor-trail"></div>
+
+    <!-- Main Chat Container -->
+    <div class="glass-effect w-full max-w-4xl h-[90vh] rounded-3xl overflow-hidden flex flex-col cyber-border">
+        <!-- Header -->
+        <div class="glass-effect p-6 border-b border-cyberblue/20 flex items-center space-x-4">
+            <div class="w-14 h-14 rounded-full bg-gradient-to-br from-cyberblue to-cyberpurple flex items-center justify-center cyber-glow">
+                <i class="fas fa-robot text-white text-2xl"></i>
+            </div>
+            <div>
+                <h1 class="text-2xl font-orbitron text-cyberblue">NEXUS AI</h1>
+                <p class="text-cyberblue/70 text-sm font-exo">Advanced Conversational Interface</p>
+            </div>
+            <div class="ml-auto flex space-x-3">
+                <div class="w-3 h-3 rounded-full bg-green-500 cyber-glow"></div>
+                <div class="w-3 h-3 rounded-full bg-cyberblue cyber-glow"></div>
+                <div class="w-3 h-3 rounded-full bg-cyberpink cyber-glow"></div>
+            </div>
+        </div>
+
+        <!-- Chat Messages Area -->
+        <div class="flex-1 p-6 overflow-y-auto scroll-container" id="chat-messages">
+            <!-- Welcome Message -->
+            <div class="message-bubble bot-message">
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 rounded-full bg-cyberblue flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-robot text-xs"></i>
+                    </div>
+                    <div>
+                        <p class="text-white font-exo">Hello! I'm Nexus, your advanced AI assistant. How can I help you today?</p>
+                        <span class="text-cyberblue/50 text-xs mt-2 block">System Online • Ready to assist</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sample User Message -->
+            <div class="message-bubble user-message">
+                <p class="text-white font-exo">Hey Nexus! Can you tell me about your capabilities?</p>
+            </div>
+
+            <!-- Sample Bot Response -->
+            <div class="message-bubble bot-message">
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 rounded-full bg-cyberblue flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-robot text-xs"></i>
+                    </div>
+                    <div>
+                        <p class="text-white font-exo">I'm equipped with advanced natural language processing, real-time data analysis, and multimodal capabilities including voice interaction. I can assist with research, creative tasks, technical queries, and much more!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Typing Indicator (Hidden by default) -->
+            <div class="typing-indicator" id="typing-indicator" style="display: none;">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="glass-effect p-6 border-t border-cyberblue/20">
+            <div class="flex space-x-4">
+                <div class="flex-1 relative">
+                    <input 
+                        type="text" 
+                        id="message-input"
+                        placeholder="Type your message..."
+                        class="w-full bg-darkpanel border-2 border-cyberblue/30 rounded-2xl px-6 py-4 text-white font-exo focus:outline-none focus:border-cyberblue transition-all duration-300 cyber-glow"
+                    />
+                    <div class="absolute right-3 top-1/2 transform -translate-y-1/2 flex space-x-2">
+                        <button class="cyber-button w-10 h-10 rounded-full bg-cyberblue/20 flex items-center justify-center hover:bg-cyberblue/30 transition-all">
+                            <i class="fas fa-paperclip text-cyberblue"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex space-x-2">
+                    <button 
+                        id="voice-button"
+                        class="cyber-button w-14 h-14 rounded-full bg-gradient-to-br from-cyberpink to-cyberpurple flex items-center justify-center cyber-glow hover:scale-110 transition-transform"
+                    >
+                        <i class="fas fa-microphone text-white"></i>
+                    </button>
+                    <button 
+                        id="send-button"
+                        class="cyber-button w-14 h-14 rounded-full bg-gradient-to-br from-cyberblue to-cyberpurple flex items-center justify-center cyber-glow hover:scale-110 transition-transform"
+                    >
+                        <i class="fas fa-paper-plane text-white"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="flex flex-wrap gap-2 mt-4">
+                <button class="cyber-button px-4 py-2 rounded-xl bg-cyberblue/10 border border-cyberblue/30 text-cyberblue text-sm font-exo hover:bg-cyberblue/20 transition-all">
+                    <i class="fas fa-lightbulb mr-2"></i>Creative Ideas
+                </button>
+                <button class="cyber-button px-4 py-2 rounded-xl bg-cyberblue/10 border border-cyberblue/30 text-cyberblue text-sm font-exo hover:bg-cyberblue/20 transition-all">
+                    <i class="fas fa-code mr-2"></i>Code Help
+                </button>
+                <button class="cyber-button px-4 py-2 rounded-xl bg-cyberblue/10 border border-cyberblue/30 text-cyberblue text-sm font-exo hover:bg-cyberblue/20 transition-all">
+                    <i class="fas fa-chart-line mr-2"></i>Analysis
+                </button>
+                <button class="cyber-button px-4 py-2 rounded-xl bg-cyberblue/10 border border-cyberblue/30 text-cyberblue text-sm font-exo hover:bg-cyberblue/20 transition-all">
+                    <i class="fas fa-question-circle mr-2"></i>FAQ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Elements -->
+    <div class="absolute inset-0 -z-10 overflow-hidden">
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-cyberblue/5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-cyberpurple/5 rounded-full blur-3xl"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-cyberpink/5 rounded-full blur-3xl"></div>
+    </div>
+
+    <script>
+        // Custom Cursor
+        const cursor = document.querySelector('.cyber-cursor');
+        const cursorTrail = document.querySelector('.cyber-cursor-trail');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            setTimeout(() => {
+                cursorTrail.style.left = e.clientX + 'px';
+                cursorTrail.style.top = e.clientY + 'px';
+            }, 100);
+        });
+
+        // Interactive elements effect
+        const interactiveElements = document.querySelectorAll('button, input, .cyber-button');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                cursor.style.background = 'rgba(0, 217, 255, 0.2)';
+            });
+            
+            el.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursor.style.background = 'transparent';
+            });
+        });
+
+        // Voice button functionality
+        const voiceButton = document.getElementById('voice-button');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const chatMessages = document.getElementById('chat-messages');
+        const typingIndicator = document.getElementById('typing-indicator');
+
+        voiceButton.addEventListener('click', () => {
+            voiceButton.classList.toggle('voice-active');
+            if (voiceButton.classList.contains('voice-active')) {
+                messageInput.placeholder = "Listening... Speak now";
+                // Simulate voice recognition (would be replaced with actual Web Speech API)
+                setTimeout(() => {
+                    messageInput.value = "This is a simulated voice input message";
+                    voiceButton.classList.remove('voice-active');
+                    messageInput.placeholder = "Type your message...";
+                }, 2000);
+            } else {
+                messageInput.placeholder = "Type your message...";
+            }
+        });
+
+        sendButton.addEventListener('click', () => {
+            const message = messageInput.value.trim();
+            if (message) {
+                // Add user message
+                addMessage(message, 'user');
+                messageInput.value = '';
+                
+                // Show typing indicator
+                typingIndicator.style.display = 'flex';
+                
+                // Simulate bot response
+                setTimeout(() => {
+                    typingIndicator.style.display = 'none';
+                    addMessage("I understand your message. This is where the AI response would appear. In a real implementation, this would connect to an AI API.", 'bot');
+                }, 1500);
+            }
+        });
+
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendButton.click();
+            }
+        });
+
+        function addMessage(text, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message-bubble ${type}-message`;
+            
+            if (type === 'user') {
+                messageDiv.innerHTML = `<p class="text-white font-exo">${text}</p>`;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 rounded-full bg-cyberblue flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-robot text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-white font-exo">${text}</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Add some sample messages on load
+        setTimeout(() => {
+            addMessage("This interface is ready for API integration! Developers can connect their preferred AI service to enable full conversational capabilities.", 'bot');
+        }, 1000);
+    </script>
+</body>
+</html>
+
